@@ -1,0 +1,22 @@
+# Environment variables
+.env
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Backend specific
+backend/.gradle/
+backend/build/
+backend/out/
+
+# OS
+.DS_Store
