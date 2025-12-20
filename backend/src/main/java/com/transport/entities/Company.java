@@ -1,6 +1,7 @@
 package com.transport.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -26,7 +27,8 @@ public class Company {
     @Column(length = 500)
     private String address;
 
-    @Column(length = 20)
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone must be 10-15 digits, optionally starting with +")
+    @Column(length = 16)
     private String phone;
 
     @Column(length = 100)
