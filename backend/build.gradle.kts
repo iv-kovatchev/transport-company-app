@@ -22,7 +22,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-core:6.6.39.Final")
 
     // MySQL Connector - Latest stable
-    implementation("com.mysql:mysql-connector-j:8.4.0")
+    implementation("com.mysql:mysql-connector-j:9.1.0")
 
     // Logging
     implementation("org.slf4j:slf4j-simple:2.0.17")
@@ -33,6 +33,10 @@ dependencies {
 
     // Jakarta Persistence API
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
+
+    // Bean Validation (Jakarta Validation)
+    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
 
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.36")

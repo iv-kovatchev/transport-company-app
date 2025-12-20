@@ -23,10 +23,10 @@ public class Main {
 
             // Create test company
             Company company = Company.builder()
-                    .name("Test Transport 2 Ltd")
-                    .registrationNumber("BG123456781")
+                    .name("Test Transport 4 Ltd")
+                    .registrationNumber("BG123456783")
                     .address("Sofia, Bulgaria")
-                    .phone("+359888123456")
+                    .phone("+3598881")
                     .email("info@testtransport.bg")
                     .build();
 
