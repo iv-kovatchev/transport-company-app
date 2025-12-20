@@ -15,6 +15,9 @@ public class Main {
     public static void main(String[] args) {
         //createDatabaseIfNotExists();
 
+        // Testing GitHub Actions pipeline deployment
+        System.out.println("Testing Azure MySQL connection...");
+
         System.out.println("Testing Hibernate connection...");
 
         Transaction transaction = null;
