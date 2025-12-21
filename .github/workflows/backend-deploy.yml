@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: transport-company-api
+  AZURE_WEBAPP_NAME: transport-company-backend
   AZURE_RESOURCE_GROUP: transport-app-rg
   JAVA_VERSION: '21'
 
