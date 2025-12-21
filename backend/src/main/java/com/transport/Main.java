@@ -3,6 +3,9 @@ package com.transport;
 import com.transport.entities.Company;
 import com.transport.utils.HibernateUtil;
 
+import com.transport.utils.config.RouteConfig;
+import com.transport.utils.config.ServerConfig;
+import io.javalin.Javalin;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,37 +16,22 @@ import java.sql.Statement;
 
 public class Main {
     public static void main(String[] args) {
-        //createDatabaseIfNotExists();
+        // Get port from environment or default to 7000
+        int port = ServerConfig.getPort();
 
-        // Testing GitHub Actions pipeline deployment
-        System.out.println("Testing Azure MySQL connection...");
+        // Create and configure Javalin server
+        Javalin app = ServerConfig.createServer();
 
-        System.out.println("Testing Hibernate connection...");
+        // Register all API routes
+        RouteConfig.registerRoutes(app);
 
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
+        // Start the server
+        app.start(port);
 
-            // Create test company
-            Company company = Company.builder()
-                    .name("Test Transport 4 Ltd")
-                    .registrationNumber("BG123456783")
-                    .address("Sofia, Bulgaria")
-                    .phone("+3598881")
-                    .email("info@testtransport.bg")
-                    .build();
-
-            session.persist(company);
-            transaction.commit();
-
-            System.out.println("✅ Company saved successfully! ID: " + company.getId());
-
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            HibernateUtil.shutdown();
-        }
+        // Log startup message
+        System.out.println("🚀 Server started on port " + port);
+        System.out.println("📍 Health check: http://localhost:" + port + "/health");
+        System.out.println("📍 API base URL: http://localhost:" + port + "/api");
     }
 
 //    private static void createDatabaseIfNotExists() {

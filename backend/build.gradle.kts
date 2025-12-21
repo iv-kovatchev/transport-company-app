@@ -1,13 +1,13 @@
 plugins {
     java
+    application
 }
 
 group = "com.transport"
-version = "1.0.0"
+version = "1.0-SNAPSHOT"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+application {
+    mainClass.set("com.transport.Application")
 }
 
 repositories {
@@ -15,41 +15,50 @@ repositories {
 }
 
 dependencies {
+    // Hibernate
+    implementation("org.hibernate.orm:hibernate-core:6.6.3.Final")
+
+    // MySQL Driver
+    implementation("com.mysql:mysql-connector-j:9.2.0")
+
     // Javalin
-    implementation("io.javalin:javalin:6.7.0")
-
-    // Hibernate ORM - Latest stable 6.6.x
-    implementation("org.hibernate.orm:hibernate-core:6.6.39.Final")
-
-    // MySQL Connector - Latest stable
-    implementation("com.mysql:mysql-connector-j:9.1.0")
-
-    // Logging
-    implementation("org.slf4j:slf4j-simple:2.0.17")
+    implementation("io.javalin:javalin:6.3.0")
 
     // Jackson for JSON
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
 
-    // Jakarta Persistence API
-    implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
-
-    // Bean Validation (Jakarta Validation)
-    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
-    implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
-
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    annotationProcessor("org.projectlombok:lombok:1.18.36")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
-    // Dotenv for loading .env files
-    implementation("io.github.cdimascio:dotenv-java:3.0.2")
+    // Jakarta Validation
+    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+    implementation("org.hibernate.validator:hibernate-validator:8.0.0.Final")
+    implementation("org.glassfish:jakarta.el:4.0.2")
 
-    // Testing
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    // Dotenv for environment variables
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
+
+    // SLF4J (Logging)
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+}
+
+// Fat JAR for Azure deployment
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.transport.Application"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
