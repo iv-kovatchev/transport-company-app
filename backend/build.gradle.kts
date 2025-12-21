@@ -7,7 +7,7 @@ group = "com.transport"
 version = "1.0-SNAPSHOT"
 
 application {
-    mainClass.set("com.transport.Application")
+    mainClass.set("com.transport.Main")
 }
 
 repositories {
@@ -47,7 +47,7 @@ dependencies {
 // Fat JAR for Azure deployment
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "com.transport.Application"
+        attributes["Main-Class"] = "com.transport.Main"
     }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
