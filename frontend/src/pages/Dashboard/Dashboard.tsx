@@ -8,6 +8,8 @@ const Dashboard = () => {
       </Typography>
       <Typography variant="body1">
         Welcome to Transport Company Management System
+        <br />
+        Deployed
       </Typography>
     </Box>
   );
