@@ -42,6 +42,10 @@ dependencies {
 
     // SLF4J (Logging)
     implementation("org.slf4j:slf4j-simple:2.0.9")
+
+    // Flyway
+    implementation("org.flywaydb:flyway-core:10.4.1")
+    implementation("org.flywaydb:flyway-mysql:10.4.1")
 }
 
 // Fat JAR for Azure deployment

@@ -1,24 +1,22 @@
-package com.transport.dtos.company;
+package com.transport.dtos.client;
 
-import com.transport.dtos.client.ClientResponse;
+import com.transport.dtos.company.CompanyResponse;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompanyResponse {
+public class ClientResponse {
     private Long id;
     private String name;
-    private String registrationNumber;
-    private String address;
     private String phone;
     private String email;
-    private List<ClientResponse> clients;
+    private String address;
+    private Long companyId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
