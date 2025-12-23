@@ -2,6 +2,7 @@ package com.transport.repositories.Company;
 
 import com.transport.entities.Company;
 import com.transport.utils.HibernateUtil;
+import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -19,6 +20,8 @@ public class CompanyRepository implements ICompanyRepository {
             session.persist(company);
             transaction.commit();
             return company;
+        } catch (ConstraintViolationException e) {
+            throw e;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -31,7 +34,7 @@ public class CompanyRepository implements ICompanyRepository {
     @Override
     public Optional<Company> findById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Company company = session.get(Company.class, id);
+            Company company = findByIdWithDetails(session, id);
             return Optional.ofNullable(company);
         } catch (Exception e) {
             throw new RuntimeException("Error finding company by id: " + id, e);
@@ -41,8 +44,7 @@ public class CompanyRepository implements ICompanyRepository {
     @Override
     public List<Company> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Company> query = session.createQuery("FROM Company", Company.class);
-            return query.getResultList();
+            return findAllWithDetails(session);
         } catch (Exception e) {
             throw new RuntimeException("Error fetching all companies", e);
         }
@@ -57,6 +59,8 @@ public class CompanyRepository implements ICompanyRepository {
             session.merge(company);
             transaction.commit();
             return company;
+        } catch (ConstraintViolationException e) {
+            throw e;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -109,5 +113,29 @@ public class CompanyRepository implements ICompanyRepository {
         } catch (Exception e) {
             throw new RuntimeException("Error checking registration number existence", e);
         }
+    }
+
+    private Company findByIdWithDetails(Session session, Long id) {
+        return session.createQuery(
+                        "SELECT c FROM Company c " +
+                                "LEFT JOIN FETCH c.clients " +
+                                // "LEFT JOIN FETCH c.employees " +      // Добавяш по-късно
+                                // "LEFT JOIN FETCH c.vehicles " +       // Добавяш по-късно
+                                // "LEFT JOIN FETCH c.transports " +     // Добавяш по-късно
+                                "WHERE c.id = :id",
+                        Company.class)
+                .setParameter("id", id)
+                .uniqueResult();
+    }
+
+    private List<Company> findAllWithDetails(Session session) {
+        return session.createQuery(
+                        "SELECT DISTINCT c FROM Company c " +
+                                "LEFT JOIN FETCH c.clients",
+                        // "LEFT JOIN FETCH c.employees " +
+                        // "LEFT JOIN FETCH c.vehicles " +
+                        // "LEFT JOIN FETCH c.transports",
+                        Company.class)
+                .getResultList();
     }
 }

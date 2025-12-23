@@ -1,5 +1,6 @@
 package com.transport.utils.config;
 
+import com.transport.utils.factories.ClientFactory;
 import com.transport.utils.factories.CompanyFactory;
 import io.javalin.Javalin;
 
@@ -12,11 +13,10 @@ public class RouteConfig {
      * Register all API routes
      */
     public static void registerRoutes(Javalin app) {
-        // Company routes
         registerCompanyRoutes(app);
+        registerClientRoutes(app);
 
         // TODO: Add other routes as entities are completed
-        // registerClientRoutes(app);
         // registerVehicleRoutes(app);
         // registerEmployeeRoutes(app);
         // registerTransportRoutes(app);
@@ -33,5 +33,18 @@ public class RouteConfig {
         app.get("/api/companies/{id}", controller::getById);
         app.put("/api/companies/{id}", controller::update);
         app.delete("/api/companies/{id}", controller::delete);
+    }
+
+    /**
+     * Register Client endpoints
+     */
+    private static void registerClientRoutes(Javalin app) {
+        var controller = ClientFactory.getController();
+
+        app.post("/api/clients", controller::create);
+        app.get("/api/clients", controller::getAll);
+        app.get("/api/clients/{id}", controller::getById);
+        app.put("/api/clients/{id}", controller::update);
+        app.delete("/api/clients/{id}", controller::delete);
     }
 }

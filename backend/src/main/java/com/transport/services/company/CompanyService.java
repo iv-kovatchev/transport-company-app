@@ -5,12 +5,13 @@ import com.transport.dtos.company.CompanyResponse;
 import com.transport.dtos.company.CompanyUpdateRequest;
 import com.transport.entities.Company;
 import com.transport.repositories.Company.ICompanyRepository;
+import com.transport.utils.EntityMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompanyService implements ICompanyService {
-    public final ICompanyRepository companyRepository;
+    private final ICompanyRepository companyRepository;
 
     public CompanyService(ICompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
@@ -41,7 +42,7 @@ public class CompanyService implements ICompanyService {
         Company savedCompany = companyRepository.save(company);
 
         // Map Entity to Response DTO
-        return mapToResponse(savedCompany);
+        return EntityMapper.toCompanyResponse(savedCompany);
     }
 
     @Override
@@ -49,14 +50,14 @@ public class CompanyService implements ICompanyService {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Company not found with id: " + id));
 
-        return mapToResponse(company);
+        return EntityMapper.toCompanyResponse(company);
     }
 
     @Override
     public List<CompanyResponse> getAll() {
         return companyRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(EntityMapper::toCompanyResponse)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +90,7 @@ public class CompanyService implements ICompanyService {
         // Save updated entity
         Company updatedCompany = companyRepository.update(existingCompany);
 
-        return mapToResponse(updatedCompany);
+        return EntityMapper.toCompanyResponse(updatedCompany);
     }
 
     @Override
@@ -100,21 +101,5 @@ public class CompanyService implements ICompanyService {
         }
 
         companyRepository.delete(id);
-    }
-
-    /**
-     * Map Company entity to CompanyResponse DTO
-     */
-    private CompanyResponse mapToResponse(Company company) {
-        return CompanyResponse.builder()
-                .id(company.getId())
-                .name(company.getName())
-                .registrationNumber(company.getRegistrationNumber())
-                .address(company.getAddress())
-                .phone(company.getPhone())
-                .email(company.getEmail())
-                .createdAt(company.getCreatedAt())
-                .updatedAt(company.getUpdatedAt())
-                .build();
     }
 }

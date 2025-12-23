@@ -15,9 +15,12 @@ public class HibernateConfig {
 
         // Hibernate behavior settings
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
         configuration.setProperty("hibernate.show_sql", "true");
         configuration.setProperty("hibernate.format_sql", "true");
+
+        configuration.setProperty("javax.persistence.validation.mode", "CALLBACK");
+        configuration.setProperty("hibernate.validator.apply_to_ddl", "false");
 
         // Connection pool settings (C3P0)
         configuration.setProperty("hibernate.c3p0.min_size", "5");
@@ -33,6 +36,9 @@ public class HibernateConfig {
 
     private static void registerEntities(Configuration configuration) {
         configuration.addAnnotatedClass(com.transport.entities.Company.class);
+        configuration.addAnnotatedClass(com.transport.entities.Client.class);
+
+        System.out.println("Registered: Client");
         // TODO: Add more entities here as we create them
         // configuration.addAnnotatedClass(com.transport.entities.Client.class);
         // configuration.addAnnotatedClass(com.transport.entities.Vehicle.class);

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "companies")
@@ -17,7 +19,9 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     @Column(nullable = false, unique = true)
+    @Size(max = 255, message = "Name cannot exceed 255 characters")
     private String name;
 
     @Column(name = "registration_number", unique = true, length = 50)
@@ -30,6 +34,7 @@ public class Company {
     @Column(length = 16)
     private String phone;
 
+    @Email(message = "Email should be valid")
     @Column(length = 100)
     private String email;
 
@@ -38,6 +43,10 @@ public class Company {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Client> clients = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

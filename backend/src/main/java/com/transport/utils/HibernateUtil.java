@@ -23,6 +23,10 @@ public class HibernateUtil {
                 throw new RuntimeException("DB_URL not configured! Create .env file or set environment variables.");
             }
 
+            if (!dbUrl.contains("createDatabaseIfNotExist")) {
+                dbUrl += (dbUrl.contains("?") ? "&" : "?") + "createDatabaseIfNotExist=true";
+            }
+
             System.out.println("Connected to: " + (dotenv.get("DB_URL") != null ? "LOCAL database" : "AZURE database"));
 
             // Build configuration using HibernateConfig
