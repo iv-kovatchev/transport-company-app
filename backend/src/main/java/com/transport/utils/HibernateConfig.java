@@ -37,8 +37,8 @@ public class HibernateConfig {
     private static void registerEntities(Configuration configuration) {
         configuration.addAnnotatedClass(com.transport.entities.Company.class);
         configuration.addAnnotatedClass(com.transport.entities.Client.class);
+        configuration.addAnnotatedClass(com.transport.entities.Vehicle.class);
 
-        System.out.println("Registered: Client");
         // TODO: Add more entities here as we create them
         // configuration.addAnnotatedClass(com.transport.entities.Client.class);
         // configuration.addAnnotatedClass(com.transport.entities.Vehicle.class);

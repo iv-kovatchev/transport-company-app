@@ -1,0 +1,1 @@
+ALTER TABLE vehicles DROP INDEX license_plate;
