@@ -2,8 +2,10 @@ package com.transport.utils;
 
 import com.transport.dtos.client.ClientResponse;
 import com.transport.dtos.company.CompanyResponse;
+import com.transport.dtos.vehicle.VehicleResponse;
 import com.transport.entities.Client;
 import com.transport.entities.Company;
+import com.transport.entities.Vehicle;
 
 import java.util.stream.Collectors;
 
@@ -48,6 +50,29 @@ public class EntityMapper {
                 .companyId(client.getCompany().getId())
                 .createdAt(client.getCreatedAt())
                 .updatedAt(client.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * Map Vehicle entity to VehicleResponse DTO
+     */
+    public static VehicleResponse toVehicleResponse(Vehicle vehicle) {
+        if (vehicle == null) {
+            return null;
+        }
+
+        return VehicleResponse.builder()
+                .id(vehicle.getId())
+                .licensePlate(vehicle.getLicensePlate())
+                .type(vehicle.getType())
+                .brand(vehicle.getBrand())
+                .model(vehicle.getModel())
+                .year(vehicle.getYear())
+                .capacityKg(vehicle.getCapacityKg())
+                .capacityPassengers(vehicle.getCapacityPassengers())
+                .companyId(vehicle.getCompany().getId())
+                .createdAt(vehicle.getCreatedAt())
+                .updatedAt(vehicle.getUpdatedAt())
                 .build();
     }
 }
