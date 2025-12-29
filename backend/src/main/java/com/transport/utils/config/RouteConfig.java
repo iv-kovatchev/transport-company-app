@@ -1,8 +1,6 @@
 package com.transport.utils.config;
 
-import com.transport.utils.factories.ClientFactory;
-import com.transport.utils.factories.CompanyFactory;
-import com.transport.utils.factories.VehicleFactory;
+import com.transport.utils.factories.*;
 import io.javalin.Javalin;
 
 /**
@@ -17,10 +15,10 @@ public class RouteConfig {
         registerCompanyRoutes(app);
         registerClientRoutes(app);
         registerVehicleRoutes(app);
+        registerEmployeeRoutes(app);
+        registerQualificationRoutes(app);
 
         // TODO: Add other routes as entities are completed
-        // registerVehicleRoutes(app);
-        // registerEmployeeRoutes(app);
         // registerTransportRoutes(app);
     }
 
@@ -61,5 +59,30 @@ public class RouteConfig {
         app.get("/api/vehicles/{id}", controller::getById);
         app.put("/api/vehicles/{id}", controller::update);
         app.delete("/api/vehicles/{id}", controller::delete);
+    }
+
+    /**
+     * Register Employee endpoints
+     */
+    private static void registerEmployeeRoutes(Javalin app) {
+        var controller = EmployeeFactory.getController();
+
+        app.post("/api/employees", controller::create);
+        app.get("/api/employees", controller::getAll);
+        app.get("/api/employees/{id}", controller::getById);
+        app.put("/api/employees/{id}", controller::update);
+        app.delete("/api/employees/{id}", controller::delete);
+    }
+
+    /**
+     * Register Qualification endpoints
+     */
+    private static void registerQualificationRoutes(Javalin app) {
+        var controller = QualificationFactory.getController();
+
+        app.post("/api/qualifications", controller::create);
+        app.get("/api/employees/{employeeId}/qualifications", controller::getByEmployeeId);
+        app.delete("/api/employees/{employeeId}/qualifications/{qualificationType}", controller::deleteByEmployeeIdAndType);
+        app.delete("/api/qualifications/{id}", controller::delete);
     }
 }

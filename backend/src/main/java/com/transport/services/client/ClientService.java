@@ -95,6 +95,11 @@ public class ClientService implements IClientService {
             throw new IllegalArgumentException("Client not found with id: " + id);
         }
 
+        // TODO: Later add check if client has transports (ON DELETE RESTRICT logic)
+        // if (transportRepository.existsByClientId(id)) {
+        //     throw new IllegalStateException("Cannot delete client with existing transports");
+        // }
+
         clientRepository.delete(id);
     }
 }

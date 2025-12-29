@@ -2,10 +2,10 @@ package com.transport.utils;
 
 import com.transport.dtos.client.ClientResponse;
 import com.transport.dtos.company.CompanyResponse;
+import com.transport.dtos.employee.EmployeeResponse;
+import com.transport.dtos.qualification.QualificationResponse;
 import com.transport.dtos.vehicle.VehicleResponse;
-import com.transport.entities.Client;
-import com.transport.entities.Company;
-import com.transport.entities.Vehicle;
+import com.transport.entities.*;
 
 import java.util.stream.Collectors;
 
@@ -73,6 +73,46 @@ public class EntityMapper {
                 .companyId(vehicle.getCompany().getId())
                 .createdAt(vehicle.getCreatedAt())
                 .updatedAt(vehicle.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * Map Employee entity to EmployeeResponse DTO
+     */
+    public static EmployeeResponse toEmployeeResponse(Employee employee) {
+        if (employee == null) {
+            return null;
+        }
+
+        return EmployeeResponse.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .phone(employee.getPhone())
+                .email(employee.getEmail())
+                .salary(employee.getSalary())
+                .companyId(employee.getCompany().getId())
+                .qualifications(employee.getQualifications().stream()
+                        .map(EntityMapper::toQualificationResponse)
+                        .collect(Collectors.toList()))
+                .createdAt(employee.getCreatedAt())
+                .updatedAt(employee.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * Map Qualification entity to QualificationResponse DTO
+     */
+    public static QualificationResponse toQualificationResponse(Qualification qualification) {
+        if (qualification == null) {
+            return null;
+        }
+
+        return QualificationResponse.builder()
+                .id(qualification.getId())
+                .employeeId(qualification.getEmployee().getId())
+                .qualificationType(qualification.getQualificationType())
+                .createdAt(qualification.getCreatedAt())
                 .build();
     }
 }
