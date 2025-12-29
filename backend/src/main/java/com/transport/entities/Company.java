@@ -48,6 +48,14 @@ public class Company {
     @Builder.Default
     private Set<Client> clients = new HashSet<>();
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Vehicle> vehicles = new HashSet<>();
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Employee> employees = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

@@ -101,6 +101,11 @@ public class VehicleService implements IVehicleService {
             throw new IllegalArgumentException("Vehicle not found with id: " + id);
         }
 
+        // TODO: Later add check if vehicle has transports (ON DELETE RESTRICT logic)
+        // if (transportRepository.existsByVehicleId(id)) {
+        //     throw new IllegalStateException("Cannot delete vehicle with existing transports");
+        // }
+
         vehicleRepository.delete(id);
     }
 }
