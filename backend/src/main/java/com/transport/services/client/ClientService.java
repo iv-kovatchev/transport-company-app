@@ -8,6 +8,7 @@ import com.transport.entities.Company;
 import com.transport.repositories.Client.IClientRepository;
 import com.transport.repositories.Company.ICompanyRepository;
 import com.transport.utils.EntityMapper;
+import com.transport.utils.factories.TransportFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,10 +96,9 @@ public class ClientService implements IClientService {
             throw new IllegalArgumentException("Client not found with id: " + id);
         }
 
-        // TODO: Later add check if client has transports (ON DELETE RESTRICT logic)
-        // if (transportRepository.existsByClientId(id)) {
-        //     throw new IllegalStateException("Cannot delete client with existing transports");
-        // }
+        if (TransportFactory.getRepository().existsByClientId(id)) {
+            throw new IllegalStateException("Cannot delete client with existing transports");
+        }
 
         clientRepository.delete(id);
     }

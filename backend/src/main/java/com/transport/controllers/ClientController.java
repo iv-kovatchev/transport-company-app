@@ -91,6 +91,8 @@ public class ClientController {
             ctx.status(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             ctx.status(HttpStatus.NOT_FOUND).json(new ErrorResponse(e.getMessage()));
+        } catch (IllegalStateException e) {
+            ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));
         }

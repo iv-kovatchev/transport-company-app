@@ -8,6 +8,7 @@ import com.transport.entities.Vehicle;
 import com.transport.repositories.Company.ICompanyRepository;
 import com.transport.repositories.Vehicle.IVehicleRepository;
 import com.transport.utils.EntityMapper;
+import com.transport.utils.factories.TransportFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,10 +102,10 @@ public class VehicleService implements IVehicleService {
             throw new IllegalArgumentException("Vehicle not found with id: " + id);
         }
 
-        // TODO: Later add check if vehicle has transports (ON DELETE RESTRICT logic)
-        // if (transportRepository.existsByVehicleId(id)) {
-        //     throw new IllegalStateException("Cannot delete vehicle with existing transports");
-        // }
+        // Check if vehicle has transports (ON DELETE RESTRICT logic)
+        if (TransportFactory.getRepository().existsByVehicleId(id)) {
+            throw new IllegalStateException("Cannot delete vehicle with existing transports");
+        }
 
         vehicleRepository.delete(id);
     }

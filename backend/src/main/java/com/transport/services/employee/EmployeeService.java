@@ -8,6 +8,7 @@ import com.transport.entities.Employee;
 import com.transport.repositories.Company.ICompanyRepository;
 import com.transport.repositories.Employee.IEmployeeRepository;
 import com.transport.utils.EntityMapper;
+import com.transport.utils.factories.TransportFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,10 +87,10 @@ public class EmployeeService implements IEmployeeService {
             throw new IllegalArgumentException("Employee not found with id: " + id);
         }
 
-        // TODO: Later add check if employee has transports (ON DELETE RESTRICT logic)
-        // if (transportRepository.existsByEmployeeId(id)) {
-        //     throw new IllegalStateException("Cannot delete employee with existing transports");
-        // }
+        // Check if client has transports (ON DELETE RESTRICT logic)
+        if (TransportFactory.getRepository().existsByClientId(id)) {
+            throw new IllegalStateException("Cannot delete client with existing transports");
+        }
 
         employeeRepository.delete(id);
     }

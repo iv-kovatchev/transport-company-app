@@ -4,6 +4,7 @@ import com.transport.dtos.client.ClientResponse;
 import com.transport.dtos.company.CompanyResponse;
 import com.transport.dtos.employee.EmployeeResponse;
 import com.transport.dtos.qualification.QualificationResponse;
+import com.transport.dtos.transport.TransportResponse;
 import com.transport.dtos.vehicle.VehicleResponse;
 import com.transport.entities.*;
 
@@ -113,6 +114,36 @@ public class EntityMapper {
                 .employeeId(qualification.getEmployee().getId())
                 .qualificationType(qualification.getQualificationType())
                 .createdAt(qualification.getCreatedAt())
+                .build();
+    }
+
+    /**
+     * Map Transport entity to TransportResponse DTO
+     */
+    public static TransportResponse toTransportResponse(Transport transport) {
+        if (transport == null) {
+            return null;
+        }
+
+        return TransportResponse.builder()
+                .id(transport.getId())
+                .companyId(transport.getCompany().getId())
+                .clientId(transport.getClient().getId())
+                .vehicleId(transport.getVehicle().getId())
+                .driverId(transport.getDriver().getId())
+                .cargoType(transport.getCargoType())
+                .cargoName(transport.getCargoName())
+                .cargoWeightKg(transport.getCargoWeightKg())
+                .passengerCount(transport.getPassengerCount())
+                .startLocation(transport.getStartLocation())
+                .endLocation(transport.getEndLocation())
+                .departureDate(transport.getDepartureDate())
+                .arrivalDate(transport.getArrivalDate())
+                .price(transport.getPrice())
+                .isPaid(transport.getIsPaid())
+                .paymentDate(transport.getPaymentDate())
+                .createdAt(transport.getCreatedAt())
+                .updatedAt(transport.getUpdatedAt())
                 .build();
     }
 }

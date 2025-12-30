@@ -1,9 +1,9 @@
 package com.transport.controllers;
 
-import com.transport.dtos.employee.EmployeeCreateRequest;
-import com.transport.dtos.employee.EmployeeResponse;
-import com.transport.dtos.employee.EmployeeUpdateRequest;
-import com.transport.services.employee.IEmployeeService;
+import com.transport.dtos.transport.TransportCreateRequest;
+import com.transport.dtos.transport.TransportResponse;
+import com.transport.dtos.transport.TransportUpdateRequest;
+import com.transport.services.transport.ITransportService;
 import com.transport.utils.ErrorHandler;
 import com.transport.utils.ErrorHandler.ErrorResponse;
 import io.javalin.http.Context;
@@ -12,25 +12,25 @@ import jakarta.validation.ConstraintViolationException;
 
 import java.util.List;
 
-public class EmployeeController {
-    private final IEmployeeService employeeService;
+public class TransportController {
+    private final ITransportService transportService;
 
-    public EmployeeController(IEmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public TransportController(ITransportService transportService) {
+        this.transportService = transportService;
     }
 
     /**
-     * POST /api/employees - Create new employee
+     * POST /api/transports - Create new transport
      */
     public void create(Context ctx) {
         try {
-            EmployeeCreateRequest request = ctx.bodyAsClass(EmployeeCreateRequest.class);
-            EmployeeResponse response = employeeService.create(request);
+            TransportCreateRequest request = ctx.bodyAsClass(TransportCreateRequest.class);
+            TransportResponse response = transportService.create(request);
             ctx.status(HttpStatus.CREATED).json(response);
         } catch (ConstraintViolationException e) {
             ctx.status(HttpStatus.BAD_REQUEST).json(ErrorHandler.handleValidationException(e));
         } catch (IllegalArgumentException e) {
-            ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorHandler.ErrorResponse(e.getMessage()));
+            ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             if (e.getCause() instanceof IllegalArgumentException cause) {
                 ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponse(cause.getMessage()));
@@ -41,12 +41,12 @@ public class EmployeeController {
     }
 
     /**
-     * GET /api/employees/{id} - Get employee by ID
+     * GET /api/transports/{id} - Get transport by ID
      */
     public void getById(Context ctx) {
         try {
             Long id = Long.parseLong(ctx.pathParam("id"));
-            EmployeeResponse response = employeeService.getById(id);
+            TransportResponse response = transportService.getById(id);
             ctx.json(response);
         } catch (IllegalArgumentException e) {
             ctx.status(HttpStatus.NOT_FOUND).json(new ErrorResponse(e.getMessage()));
@@ -56,11 +56,11 @@ public class EmployeeController {
     }
 
     /**
-     * GET /api/employees - Get all employees
+     * GET /api/transports - Get all transports
      */
     public void getAll(Context ctx) {
         try {
-            List<EmployeeResponse> responses = employeeService.getAll();
+            List<TransportResponse> responses = transportService.getAll();
             ctx.json(responses);
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));
@@ -68,13 +68,13 @@ public class EmployeeController {
     }
 
     /**
-     * PUT /api/employees/{id} - Update employee
+     * PUT /api/transports/{id} - Update transport
      */
     public void update(Context ctx) {
         try {
             Long id = Long.parseLong(ctx.pathParam("id"));
-            EmployeeUpdateRequest request = ctx.bodyAsClass(EmployeeUpdateRequest.class);
-            EmployeeResponse response = employeeService.update(id, request);
+            TransportUpdateRequest request = ctx.bodyAsClass(TransportUpdateRequest.class);
+            TransportResponse response = transportService.update(id, request);
             ctx.json(response);
         } catch (ConstraintViolationException e) {
             ctx.status(HttpStatus.BAD_REQUEST).json(ErrorHandler.handleValidationException(e));
@@ -90,16 +90,29 @@ public class EmployeeController {
     }
 
     /**
-     * DELETE /api/employees/{id} - Delete employee
+     * DELETE /api/transports/{id} - Delete transport
      */
     public void delete(Context ctx) {
         try {
             Long id = Long.parseLong(ctx.pathParam("id"));
-            employeeService.delete(id);
+            transportService.delete(id);
             ctx.status(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             ctx.status(HttpStatus.NOT_FOUND).json(new ErrorResponse(e.getMessage()));
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));
+        }
+    }
+
+    /**
+     * PUT /api/transports/{id}/mark-paid - Mark transport as paid
+     */
+    public void markAsPaid(Context ctx) {
+        try {
+            Long id = Long.parseLong(ctx.pathParam("id"));
+            TransportResponse response = transportService.markAsPaid(id);
+            ctx.json(response);
+        } catch (IllegalArgumentException e) {
             ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));

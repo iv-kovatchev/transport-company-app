@@ -40,10 +40,6 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(com.transport.entities.Vehicle.class);
         configuration.addAnnotatedClass(com.transport.entities.Employee.class);
         configuration.addAnnotatedClass(com.transport.entities.Qualification.class);
-
-        // TODO: Add more entities here as we create them
-        // configuration.addAnnotatedClass(com.transport.entities.Client.class);
-        // configuration.addAnnotatedClass(com.transport.entities.Vehicle.class);
-        // etc.
+        configuration.addAnnotatedClass(com.transport.entities.Transport.class);
     }
 }
