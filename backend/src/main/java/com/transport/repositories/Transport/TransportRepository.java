@@ -87,6 +87,45 @@ public class TransportRepository implements ITransportRepository {
     }
 
     @Override
+    public List<Transport> findAllByPaymentStatus(Boolean isPaid) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT t FROM Transport t " +
+                                    "LEFT JOIN FETCH t.company " +
+                                    "LEFT JOIN FETCH t.client " +
+                                    "LEFT JOIN FETCH t.vehicle " +
+                                    "LEFT JOIN FETCH t.driver d " +
+                                    "LEFT JOIN FETCH d.qualifications " +
+                                    "WHERE t.isPaid = :isPaid",
+                            Transport.class)
+                    .setParameter("isPaid", isPaid)
+                    .list();
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding transports by payment status", e);
+        }
+    }
+
+    @Override
+    public List<Transport> findAllByCompanyIdAndPaymentStatus(Long companyId, Boolean isPaid) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT t FROM Transport t " +
+                                    "LEFT JOIN FETCH t.company " +
+                                    "LEFT JOIN FETCH t.client " +
+                                    "LEFT JOIN FETCH t.vehicle " +
+                                    "LEFT JOIN FETCH t.driver d " +
+                                    "LEFT JOIN FETCH d.qualifications " +
+                                    "WHERE t.company.id = :companyId AND t.isPaid = :isPaid",
+                            Transport.class)
+                    .setParameter("companyId", companyId)
+                    .setParameter("isPaid", isPaid)
+                    .list();
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding transports by company and payment status", e);
+        }
+    }
+
+    @Override
     public boolean existsByVehicleId(Long vehicleId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery(

@@ -18,6 +18,7 @@ public class RouteConfig {
         registerEmployeeRoutes(app);
         registerQualificationRoutes(app);
         registerTransportRoutes(app);
+        registerReportRoutes(app);
     }
 
     /**
@@ -96,5 +97,17 @@ public class RouteConfig {
         app.put("/api/transports/{id}", controller::update);
         app.delete("/api/transports/{id}", controller::delete);
         app.put("/api/transports/{id}/mark-paid", controller::markAsPaid);
+    }
+
+    /**
+     * Register Report endpoints
+     */
+    private static void registerReportRoutes(Javalin app) {
+        var controller = ReportFactory.getController();
+
+        app.get("/api/reports/companies/{id}/summary", controller::getCompanySummary);
+        app.get("/api/reports/companies/{id}/revenue", controller::getCompanyRevenueByPeriod);
+        app.get("/api/reports/companies/{id}/drivers-performance", controller::getDriversPerformance);
+        app.get("/api/reports/employees/{id}/revenue", controller::getEmployeeRevenue);
     }
 }

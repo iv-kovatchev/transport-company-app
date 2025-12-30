@@ -5,6 +5,8 @@ import com.transport.dtos.transport.TransportResponse;
 import com.transport.dtos.transport.TransportUpdateRequest;
 import com.transport.services.IService;
 
+import java.util.List;
+
 public interface ITransportService extends IService<
         TransportCreateRequest,
         TransportUpdateRequest,
@@ -15,4 +17,9 @@ public interface ITransportService extends IService<
      * Mark transport as paid
      */
     TransportResponse markAsPaid(Long id);
+
+    /**
+     * Get all transports filtered by payment status
+     */
+    List<TransportResponse> getAllByPaymentStatus(Boolean isPaid);
 }
