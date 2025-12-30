@@ -93,6 +93,7 @@ public class RouteConfig {
 
         app.post("/api/transports", controller::create);
         app.get("/api/transports", controller::getAll);
+        app.get("/api/transports/export/csv", controller::exportCsv);
         app.get("/api/transports/{id}", controller::getById);
         app.put("/api/transports/{id}", controller::update);
         app.delete("/api/transports/{id}", controller::delete);

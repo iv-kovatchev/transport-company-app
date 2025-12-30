@@ -127,4 +127,28 @@ public class TransportController {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));
         }
     }
+
+    /**
+     * GET /api/transports/export/csv - Export all transports to CSV
+     */
+    public void exportCsv(Context ctx) {
+        try {
+            // Generate CSV
+            byte[] csvData = transportService.exportToCsv();
+
+            // Generate filename with current date
+            String timestamp = java.time.LocalDateTime.now()
+                    .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+            String filename = "transports_" + timestamp + ".csv";
+
+            // Set response headers for file download
+            ctx.contentType("text/csv; charset=utf-8");
+            ctx.header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+            ctx.result(csvData);
+
+        } catch (Exception e) {
+            ctx.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .json(new ErrorResponse("Error exporting transports to CSV: " + e.getMessage()));
+        }
+    }
 }

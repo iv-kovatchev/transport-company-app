@@ -41,4 +41,10 @@ public interface ITransportRepository extends IRepository<Transport, Long> {
      * Find all transports by company filtered by payment status
      */
     List<Transport> findAllByCompanyIdAndPaymentStatus(Long companyId, Boolean isPaid);
+
+    /**
+     * Find all transports with ALL relationships for CSV export
+     * (same as findAllWithRelationships but explicitly named for export purpose)
+     */
+    List<Transport> findAllForExport();
 }

@@ -22,4 +22,10 @@ public interface ITransportService extends IService<
      * Get all transports filtered by payment status
      */
     List<TransportResponse> getAllByPaymentStatus(Boolean isPaid);
+
+    /**
+     * Export all transports to CSV format
+     * @return CSV file as byte array
+     */
+    byte[] exportToCsv();
 }
