@@ -17,9 +17,7 @@ public class RouteConfig {
         registerVehicleRoutes(app);
         registerEmployeeRoutes(app);
         registerQualificationRoutes(app);
-
-        // TODO: Add other routes as entities are completed
-        // registerTransportRoutes(app);
+        registerTransportRoutes(app);
     }
 
     /**
@@ -84,5 +82,19 @@ public class RouteConfig {
         app.get("/api/employees/{employeeId}/qualifications", controller::getByEmployeeId);
         app.delete("/api/employees/{employeeId}/qualifications/{qualificationType}", controller::deleteByEmployeeIdAndType);
         app.delete("/api/qualifications/{id}", controller::delete);
+    }
+
+    /**
+     * Register Transport endpoints
+     */
+    private static void registerTransportRoutes(Javalin app) {
+        var controller = TransportFactory.getController();
+
+        app.post("/api/transports", controller::create);
+        app.get("/api/transports", controller::getAll);
+        app.get("/api/transports/{id}", controller::getById);
+        app.put("/api/transports/{id}", controller::update);
+        app.delete("/api/transports/{id}", controller::delete);
+        app.put("/api/transports/{id}/mark-paid", controller::markAsPaid);
     }
 }
