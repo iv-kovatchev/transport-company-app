@@ -60,7 +60,16 @@ public class TransportController {
      */
     public void getAll(Context ctx) {
         try {
-            List<TransportResponse> responses = transportService.getAll();
+            String isPaidParam = ctx.queryParam("isPaid");
+            List<TransportResponse> responses;
+
+            if (isPaidParam != null) {
+                Boolean isPaid = Boolean.parseBoolean(isPaidParam);
+                responses = transportService.getAllByPaymentStatus(isPaid);
+            } else {
+                responses = transportService.getAll();
+            }
+
             ctx.json(responses);
         } catch (Exception e) {
             ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));

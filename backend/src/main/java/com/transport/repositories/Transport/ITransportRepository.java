@@ -31,4 +31,14 @@ public interface ITransportRepository extends IRepository<Transport, Long> {
      * Check if client has existing transports (for DELETE restriction)
      */
     boolean existsByClientId(Long clientId);
+
+    /**
+     * Find all transports filtered by payment status
+     */
+    List<Transport> findAllByPaymentStatus(Boolean isPaid);
+
+    /**
+     * Find all transports by company filtered by payment status
+     */
+    List<Transport> findAllByCompanyIdAndPaymentStatus(Long companyId, Boolean isPaid);
 }

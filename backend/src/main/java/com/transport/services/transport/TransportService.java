@@ -113,6 +113,14 @@ public class TransportService implements ITransportService {
     }
 
     @Override
+    public List<TransportResponse> getAllByPaymentStatus(Boolean isPaid) {
+        return transportRepository.findAllByPaymentStatus(isPaid)
+                .stream()
+                .map(EntityMapper::toTransportResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public TransportResponse update(Long id, TransportUpdateRequest request) {
         // Get existing transport with all relationships
         Transport existingTransport = transportRepository.findByIdWithRelationships(id)
