@@ -13,8 +13,12 @@ import com.transport.repositories.Employee.IEmployeeRepository;
 import com.transport.repositories.Transport.ITransportRepository;
 import com.transport.repositories.Vehicle.IVehicleRepository;
 import com.transport.utils.EntityMapper;
+import com.opencsv.CSVWriter;
 
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -183,6 +187,77 @@ public class TransportService implements ITransportService {
         Transport updatedTransport = transportRepository.update(transport);
 
         return EntityMapper.toTransportResponse(updatedTransport);
+    }
+
+    @Override
+    public byte[] exportToCsv() {
+        try {
+            // Get all transports with relationships
+            List<Transport> transports = transportRepository.findAllForExport();
+
+            // Create CSV writer
+            StringWriter stringWriter = new StringWriter();
+            CSVWriter csvWriter = new CSVWriter(stringWriter);
+
+            // Define date formatter
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // Write CSV header
+            String[] header = {
+                    "Transport ID",
+                    "Company Name",
+                    "Client Name",
+                    "Vehicle Registration",
+                    "Vehicle Type",
+                    "Driver Name",
+                    "Cargo Type",
+                    "Cargo Name",
+                    "Cargo Weight (kg)",
+                    "Passenger Count",
+                    "Start Location",
+                    "End Location",
+                    "Departure Date",
+                    "Arrival Date",
+                    "Price",
+                    "Is Paid",
+                    "Payment Date",
+                    "Created At"
+            };
+           // csvWriter.writeNext(header);
+
+            // Write data rows
+            for (Transport transport : transports) {
+                String[] row = {
+                        transport.getId().toString(),
+                        transport.getCompany().getName(),
+                        transport.getClient().getName(),
+                        transport.getVehicle().getLicensePlate(),
+                        transport.getVehicle().getType().toString(),
+                        transport.getDriver().getFirstName() + " " + transport.getDriver().getLastName(),
+                        transport.getCargoType().toString(),
+                        transport.getCargoName() != null ? transport.getCargoName() : "",
+                        transport.getCargoWeightKg() != null ? transport.getCargoWeightKg().toString() : "",
+                        transport.getPassengerCount() != null ? transport.getPassengerCount().toString() : "",
+                        transport.getStartLocation(),
+                        transport.getEndLocation(),
+                        transport.getDepartureDate().format(dateFormatter),
+                        transport.getArrivalDate() != null ? transport.getArrivalDate().format(dateFormatter) : "",
+                        transport.getPrice().toString(),
+                        transport.getIsPaid().toString(),
+                        transport.getPaymentDate() != null ? transport.getPaymentDate().format(dateFormatter) : "",
+                        transport.getCreatedAt().format(dateFormatter)
+                };
+                csvWriter.writeNext(row);
+            }
+
+            csvWriter.close();
+
+            // Convert to bytes
+            return stringWriter.toString().getBytes(StandardCharsets.UTF_8);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error exporting transports to CSV", e);
+        }
     }
 
     /**

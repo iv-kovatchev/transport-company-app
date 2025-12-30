@@ -205,4 +205,21 @@ public class TransportRepository implements ITransportRepository {
             throw new RuntimeException("Error deleting transport with id: " + id, e);
         }
     }
+
+    @Override
+    public List<Transport> findAllForExport() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT t FROM Transport t " +
+                                    "LEFT JOIN FETCH t.company " +
+                                    "LEFT JOIN FETCH t.client " +
+                                    "LEFT JOIN FETCH t.vehicle " +
+                                    "LEFT JOIN FETCH t.driver d " +
+                                    "ORDER BY t.id ASC",
+                            Transport.class)
+                    .list();
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding all transports for export", e);
+        }
+    }
 }

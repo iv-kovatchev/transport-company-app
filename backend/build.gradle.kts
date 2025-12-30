@@ -46,6 +46,9 @@ dependencies {
     // Flyway
     implementation("org.flywaydb:flyway-core:10.4.1")
     implementation("org.flywaydb:flyway-mysql:10.4.1")
+
+    // OpenCSV for CSV export
+    implementation("com.opencsv:opencsv:5.9")
 }
 
 // Fat JAR for Azure deployment
