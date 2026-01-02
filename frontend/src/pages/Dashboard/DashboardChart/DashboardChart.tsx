@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Card, CardContent, Box, Select, MenuItem, Typography, FormControl, InputLabel } from '@mui/material';
 import type { TransportResponse } from '../../../types/transport.types';
 import type { VehicleResponse } from '../../../types/vehicle.types';
