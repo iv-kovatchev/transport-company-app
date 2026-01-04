@@ -1,16 +1,26 @@
-import { useParams } from 'react-router-dom';
-import { Box, Typography, CircularProgress } from '@mui/material';
-import { useGetCompany } from '../../api/companies/useGetCompany';
+import { Typography, CircularProgress, Box } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Container, Header, BackButton, LoadingContainer } from './CompanyDetails.styles';
+import { useCompanyDetails } from './useCompanyDetails';
+import { RevenueCard } from './RevenueCard/RevenueCard';
+import { SummaryCard } from './SummaryCard/SummaryCard';
+import { DriversPerformanceCard } from './DriversPerformanceCard/DriversPerformanceCard';
 
 const CompanyDetails = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: company, isLoading } = useGetCompany(Number(id));
+  const {
+    company,
+    summary,
+    drivers,
+    isLoading,
+    handleBackToDashboard,
+  } = useCompanyDetails();
+
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+      <LoadingContainer>
         <CircularProgress />
-      </Box>
+      </LoadingContainer>
     );
   }
 
@@ -19,15 +29,34 @@ const CompanyDetails = () => {
   }
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        {company.name}
-      </Typography>
-      <Typography>Registration: {company.registrationNumber}</Typography>
-      <Typography>Address: {company.address}</Typography>
-      <Typography>Phone: {company.phone}</Typography>
-      <Typography>Email: {company.email}</Typography>
-    </Box>
+    <Container>
+      <Header>
+        <BackButton
+          startIcon={<ArrowBackIcon />}
+          onClick={handleBackToDashboard}
+          variant="outlined"
+        >
+          Back to Dashboard
+        </BackButton>
+        <Typography variant="h4">{company.name}</Typography>
+      </Header>
+
+      {/* Cards */}
+      <Box display="flex" gap={3} mb={3}>
+        {summary && (
+          <Box flex={1}>
+            <SummaryCard summary={summary} />
+          </Box>
+        )}
+        <Box flex={1}>
+          <RevenueCard companyId={company.id} />
+        </Box>
+
+        <Box flex={1}>
+          <DriversPerformanceCard drivers={drivers || []} />
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

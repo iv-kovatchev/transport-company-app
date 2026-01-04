@@ -42,14 +42,14 @@ public class ReportService implements IReportService {
         return CompanySummaryReport.builder()
                 .companyId(companyId)
                 .companyName(company.getName())
-                .totalTransports(((Number) data[0]).longValue())
-                .totalRevenue((BigDecimal) data[1])
-                .paidTransports(((Number) data[2]).longValue())
-                .unpaidTransports(((Number) data[3]).longValue())
-                .paidRevenue((BigDecimal) data[4])
-                .unpaidRevenue((BigDecimal) data[5])
-                .totalVehicles((Long) data[6])
-                .totalEmployees((Long) data[7])
+                .totalTransports(data[0] != null ? ((Number) data[0]).longValue() : 0L)
+                .totalRevenue(data[1] != null ? (BigDecimal) data[1] : BigDecimal.ZERO)
+                .paidTransports(data[2] != null ? ((Number) data[2]).longValue() : 0L)
+                .unpaidTransports(data[3] != null ? ((Number) data[3]).longValue() : 0L)
+                .paidRevenue(data[4] != null ? (BigDecimal) data[4] : BigDecimal.ZERO)
+                .unpaidRevenue(data[5] != null ? (BigDecimal) data[5] : BigDecimal.ZERO)
+                .totalVehicles(data[6] != null ? (Long) data[6] : 0L)
+                .totalEmployees(data[7] != null ? (Long) data[7] : 0L)
                 .build();
     }
 
