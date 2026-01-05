@@ -222,4 +222,17 @@ public class TransportRepository implements ITransportRepository {
             throw new RuntimeException("Error finding all transports for export", e);
         }
     }
+
+    @Override
+    public List<Transport> findByCompanyId(Long companyId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT t FROM Transport t WHERE t.company.id = :companyId",
+                            Transport.class)
+                    .setParameter("companyId", companyId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching transports by company id: " + companyId, e);
+        }
+    }
 }

@@ -2,7 +2,7 @@ import { styled } from '@mui/material/styles';
 import { Card, Box } from '@mui/material';
 
 export const RevenueStyledCard = styled(Card)({
-    height: '400px',
+    height: '450px',
     overflow: 'auto',
 });
 

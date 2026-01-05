@@ -47,4 +47,6 @@ public interface ITransportRepository extends IRepository<Transport, Long> {
      * (same as findAllWithRelationships but explicitly named for export purpose)
      */
     List<Transport> findAllForExport();
+
+    List<Transport> findByCompanyId(Long companyId);
 }

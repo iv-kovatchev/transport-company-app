@@ -84,6 +84,7 @@ public class EmployeeController {
             if (e.getCause() instanceof IllegalArgumentException cause) {
                 ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponse(cause.getMessage()));
             } else {
+                e.printStackTrace();
                 ctx.status(HttpStatus.INTERNAL_SERVER_ERROR).json(new ErrorResponse("Internal server error"));
             }
         }

@@ -4,13 +4,18 @@ import { Container, Header, BackButton, LoadingContainer } from './CompanyDetail
 import { useCompanyDetails } from './useCompanyDetails';
 import { RevenueCard } from './RevenueCard/RevenueCard';
 import { SummaryCard } from './SummaryCard/SummaryCard';
-import { DriversPerformanceCard } from './DriversPerformanceCard/DriversPerformanceCard';
+import { EmployeeRevenueCard } from './EmployeeRevenueCard/EmployeeRevenueCard';
+import { CompanyDetailsTabs } from './CompanyDetailsTabs/CompanyDetailsTabs';
 
 const CompanyDetails = () => {
   const {
     company,
     summary,
-    drivers,
+    //drivers,
+    employees,
+    vehicles,
+    clients,
+    transports,
     isLoading,
     handleBackToDashboard,
   } = useCompanyDetails();
@@ -52,10 +57,23 @@ const CompanyDetails = () => {
           <RevenueCard companyId={company.id} />
         </Box>
 
-        <Box flex={1}>
+        {/* <Box flex={1}>
           <DriversPerformanceCard drivers={drivers || []} />
+        </Box> */}
+
+        <Box flex={1}>
+          <EmployeeRevenueCard employees={employees || []} />
         </Box>
       </Box>
+
+      {/* Tabs with Tables */}
+      <CompanyDetailsTabs
+        companyId={company.id}
+        employees={employees || []}
+        vehicles={vehicles || []}
+        clients={clients || []}
+        transports={transports || []}
+      />
     </Container>
   );
 };

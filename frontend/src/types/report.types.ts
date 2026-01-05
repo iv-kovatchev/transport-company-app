@@ -29,3 +29,13 @@ export interface DriverPerformanceReport {
   totalRevenue: number;
   averageRevenuePerTransport: number;
 }
+
+export interface EmployeeRevenueReport {
+  employeeId: number;
+  employeeName: string;
+  startDate: string;
+  endDate: string;
+  totalTransports: number;
+  totalRevenue: number;
+  averageRevenuePerTransport: number;
+}

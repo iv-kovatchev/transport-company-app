@@ -128,4 +128,17 @@ public class VehicleRepository implements IVehicleRepository {
             throw new RuntimeException("Error checking if vehicle exists by license plate", e);
         }
     }
+
+    @Override
+    public List<Vehicle> findByCompanyId(Long companyId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT v FROM Vehicle v WHERE v.company.id = :companyId",
+                            Vehicle.class)
+                    .setParameter("companyId", companyId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching vehicles by company id: " + companyId, e);
+        }
+    }
 }

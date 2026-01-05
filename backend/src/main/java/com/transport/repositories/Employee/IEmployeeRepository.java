@@ -26,4 +26,6 @@ public interface IEmployeeRepository extends IRepository<Employee, Long> {
      * Find employee by ID with company AND qualifications (JOIN FETCH to avoid N+1)
      */
     Optional<Employee> findByIdWithCompanyAndQualifications(Long id);
+
+    List<Employee> findByCompanyId(Long companyId);
 }

@@ -130,4 +130,17 @@ public class ClientRepository implements IClientRepository {
             throw new RuntimeException("Error checking if client exists by name and company", e);
         }
     }
+
+    @Override
+    public List<Client> findByCompanyId(Long companyId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT c FROM Client c WHERE c.company.id = :companyId",
+                            Client.class)
+                    .setParameter("companyId", companyId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching clients by company id: " + companyId, e);
+        }
+    }
 }

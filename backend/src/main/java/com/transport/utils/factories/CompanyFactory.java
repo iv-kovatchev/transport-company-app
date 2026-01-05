@@ -24,7 +24,11 @@ public class CompanyFactory {
 
     public static ICompanyService getService() {
         if (companyService == null) {
-            companyService = new CompanyService(getRepository());
+            companyService = new CompanyService(getRepository(),
+                    EmployeeFactory.getRepository(),
+                    ClientFactory.getRepository(),
+                    VehicleFactory.getRepository(),
+                    TransportFactory.getRepository());
         }
         return companyService;
     }

@@ -32,6 +32,11 @@ public class RouteConfig {
         app.get("/api/companies/{id}", controller::getById);
         app.put("/api/companies/{id}", controller::update);
         app.delete("/api/companies/{id}", controller::delete);
+
+        app.get("/api/companies/{id}/employees", controller::getCompanyEmployees);
+        app.get("/api/companies/{id}/clients", controller::getCompanyClients);
+        app.get("/api/companies/{id}/vehicles", controller::getCompanyVehicles);
+        app.get("/api/companies/{id}/transports", controller::getCompanyTransports);
     }
 
     /**
