@@ -21,4 +21,6 @@ public interface IVehicleRepository extends IRepository<Vehicle, Long> {
      * Check if license plate exists for a different vehicle (for update validation)
      */
     boolean existsByLicensePlateAndIdNot(String licensePlate, Long id);
+
+    List<Vehicle> findByCompanyId(Long companyId);
 }

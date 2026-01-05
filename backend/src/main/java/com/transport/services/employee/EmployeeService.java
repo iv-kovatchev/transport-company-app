@@ -64,7 +64,7 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public EmployeeResponse update(Long id, EmployeeUpdateRequest request) {
         // Check if employee exists
-        Employee existingEmployee = employeeRepository.findByIdWithCompany(id)
+        Employee existingEmployee = employeeRepository.findByIdWithQualifications(id)
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + id));
 
         // Update fields (company CANNOT be changed!)

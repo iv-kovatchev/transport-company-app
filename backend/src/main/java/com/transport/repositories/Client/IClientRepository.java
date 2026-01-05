@@ -21,4 +21,6 @@ public interface IClientRepository extends IRepository<Client, Long> {
      * Find all clients with company data (JOIN FETCH to avoid N+1)
      */
     List<Client> findAllWithCompany();
+
+    List<Client> findByCompanyId(Long companyId);
 }

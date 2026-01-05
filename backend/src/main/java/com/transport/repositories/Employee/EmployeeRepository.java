@@ -119,7 +119,11 @@ public class EmployeeRepository implements IEmployeeRepository {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(employee);
+            Employee mergedEmployee = session.merge(employee);
+
+            // Initialize qualifications before closing session
+            mergedEmployee.getQualifications().size();
+
             transaction.commit();
             return employee;
         } catch (ConstraintViolationException e) {
@@ -147,6 +151,21 @@ public class EmployeeRepository implements IEmployeeRepository {
                 transaction.rollback();
             }
             throw new RuntimeException("Error deleting employee with id: " + id, e);
+        }
+    }
+
+    @Override
+    public List<Employee> findByCompanyId(Long companyId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT e FROM Employee e " +
+                                    "LEFT JOIN FETCH e.qualifications " +
+                                    "WHERE e.company.id = :companyId",
+                            Employee.class)
+                    .setParameter("companyId", companyId)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching employees by company id: " + companyId, e);
         }
     }
 }
