@@ -12,6 +12,9 @@ import { CreateEditVehicleModal } from '../CreateEditVehicleModal/CreateEditVehi
 import { DeleteVehicleDialog } from '../DeleteVehicleDialog/DeleteVehicleDialog';
 import { CreateEditClientModal } from '../CreateEditClientModal/CreateEditClientModal';
 import { DeleteClientDialog } from '../DeleteClientDialog/DeleteClientDialog';
+import CreateEditTransportModal from '../CreateEditTransportModal/CreateEditTransportModal';
+import { DeleteTransportDialog } from '../DeleteTransportDialog/DeleteTransportDialog';
+import PayTransportDialog from '../PayTransportDialog/PayTransportDialog';
 
 interface CompanyDetailsTabsProps {
     companyId: number;
@@ -59,6 +62,17 @@ export const CompanyDetailsTabs = ({
         handleCloseClientModal,
         handleCloseClientDeleteDialog,
         getClientActions,
+        isTransportModalOpen,
+        selectedTransport,
+        isTransportDeleteDialogOpen,
+        transportToDelete,
+        isPayTransportDialogOpen,
+        transportToPay,
+        handleCreateTransport,
+        handleCloseTransportModal,
+        handleCloseTransportDeleteDialog,
+        handleClosePayTransportDialog,
+        getTransportActions,
     } = useCompanyDetailsTabs();
 
     return (
@@ -130,7 +144,23 @@ export const CompanyDetailsTabs = ({
                         </>
                     )}
                     {activeTab === 3 && (
-                        <Table columns={transportColumns} data={transports} emptyMessage="No transports found" />
+                        <>
+                            <Box display="flex" justifyContent="flex-end" mb={2}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<AddIcon />}
+                                    onClick={handleCreateTransport}
+                                >
+                                    Create Transport
+                                </Button>
+                            </Box>
+                            <Table
+                                columns={transportColumns}
+                                data={transports}
+                                emptyMessage="No transports found"
+                                actions={getTransportActions(transports)}
+                            />
+                        </>
                     )}
                 </Box>
             </Box>
@@ -175,6 +205,29 @@ export const CompanyDetailsTabs = ({
                 open={isClientDeleteDialogOpen}
                 onClose={handleCloseClientDeleteDialog}
                 client={clientToDelete}
+            />
+
+            {/* Transport Modals */}
+            <CreateEditTransportModal
+                open={isTransportModalOpen}
+                onClose={handleCloseTransportModal}
+                transport={selectedTransport}
+                companyId={companyId}
+                clients={clients}
+                vehicles={vehicles}
+                employees={employees}
+            />
+
+            <DeleteTransportDialog
+                open={isTransportDeleteDialogOpen}
+                onClose={handleCloseTransportDeleteDialog}
+                transport={transportToDelete}
+            />
+
+            <PayTransportDialog
+                open={isPayTransportDialogOpen}
+                onClose={handleClosePayTransportDialog}
+                transport={transportToPay}
             />
         </>
     );
