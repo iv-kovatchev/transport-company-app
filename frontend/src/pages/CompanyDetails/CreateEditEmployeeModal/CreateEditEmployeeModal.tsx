@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form';
-import { TextField, Box, Snackbar, Alert } from '@mui/material';
+import { TextField, Box, Snackbar, Alert, FormControlLabel, Checkbox, Typography } from '@mui/material';
 import Modal from '../../../components/Modal/Modal';
 import { useCreateEditEmployeeModal } from './useCreateEditEmployeeModal';
 import type { EmployeeResponse } from '../../../types/employee.types';
@@ -12,7 +12,18 @@ interface CreateEditEmployeeModalProps {
 }
 
 export const CreateEditEmployeeModal = ({ open, onClose, employee, companyId }: CreateEditEmployeeModalProps) => {
-  const { control, handleSubmit, errors, isPending, snackbar, handleCloseSnackbar, mode } = useCreateEditEmployeeModal({
+  const { 
+    control, 
+    handleSubmit, 
+    errors, 
+    isPending, 
+    snackbar, 
+    handleCloseSnackbar, 
+    mode,
+    allQualificationTypes,
+    selectedQualifications,
+    handleQualificationToggle,
+  } = useCreateEditEmployeeModal({
     open,
     onClose,
     employee,
@@ -104,6 +115,27 @@ export const CreateEditEmployeeModal = ({ open, onClose, employee, companyId }: 
               />
             )}
           />
+
+          {/* Qualifications Section */}
+          <Box mt={2}>
+            <Typography variant="subtitle1" gutterBottom>
+              Qualifications
+            </Typography>
+            <Box display="flex" flexDirection="column">
+              {allQualificationTypes.map((qualificationType) => (
+                <FormControlLabel
+                  key={qualificationType}
+                  control={
+                    <Checkbox
+                      checked={selectedQualifications.includes(qualificationType)}
+                      onChange={() => handleQualificationToggle(qualificationType)}
+                    />
+                  }
+                  label={qualificationType.replace(/_/g, ' ')}
+                />
+              ))}
+            </Box>
+          </Box>
         </Box>
       </Modal>
 

@@ -23,6 +23,12 @@ export const useCompanyDetailsTabs = () => {
   const [isVehicleDeleteDialogOpen, setIsVehicleDeleteDialogOpen] = useState(false);
   const [vehicleToDelete, setVehicleToDelete] = useState<VehicleResponse | undefined>(undefined);
 
+  // Client modal/dialog states
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<ClientResponse | undefined>(undefined);
+  const [isClientDeleteDialogOpen, setIsClientDeleteDialogOpen] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState<ClientResponse | undefined>(undefined);
+
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
@@ -83,6 +89,34 @@ export const useCompanyDetailsTabs = () => {
     setVehicleToDelete(undefined);
   };
 
+  // Client handlers
+  const handleCreateClient = () => {
+    setSelectedClient(undefined);
+    setIsClientModalOpen(true);
+  };
+
+  const handleEditClient = (clientId: number, clients: ClientResponse[]) => {
+    const client = clients.find(c => c.id === clientId);
+    setSelectedClient(client);
+    setIsClientModalOpen(true);
+  };
+
+  const handleDeleteClient = (clientId: number, clients: ClientResponse[]) => {
+    const client = clients.find(c => c.id === clientId);
+    setClientToDelete(client);
+    setIsClientDeleteDialogOpen(true);
+  };
+
+  const handleCloseClientModal = () => {
+    setIsClientModalOpen(false);
+    setSelectedClient(undefined);
+  };
+
+  const handleCloseClientDeleteDialog = () => {
+    setIsClientDeleteDialogOpen(false);
+    setClientToDelete(undefined);
+  };
+
   // Employee columns
   const employeeColumns: Column<EmployeeResponse>[] = [
     { id: 'id', label: 'ID', width: 80 },
@@ -90,11 +124,11 @@ export const useCompanyDetailsTabs = () => {
     { id: 'lastName', label: 'Last Name', width: 200 },
     { id: 'phone', label: 'Phone', width: 200 },
     { id: 'email', label: 'Email', width: 250 },
-    { 
-      id: 'salary', 
-      label: 'Salary', 
-      width: 150, 
-      render: (row) => `${row.salary.toFixed(2)} BGN` 
+    {
+      id: 'salary',
+      label: 'Salary',
+      width: 150,
+      render: (row) => `${row.salary.toFixed(2)} BGN`
     },
   ];
 
@@ -102,9 +136,9 @@ export const useCompanyDetailsTabs = () => {
   const vehicleColumns: Column<VehicleResponse>[] = [
     { id: 'id', label: 'ID', width: 80 },
     { id: 'licensePlate', label: 'License Plate', width: 150 },
-    { 
-      id: 'type', 
-      label: 'Type', 
+    {
+      id: 'type',
+      label: 'Type',
       width: 120,
       render: (row) => (
         <Chip label={row.type} size="small" color="primary" />
@@ -129,15 +163,15 @@ export const useCompanyDetailsTabs = () => {
   // Transport columns
   const transportColumns: Column<TransportResponse>[] = [
     { id: 'id', label: 'ID', width: 80 },
-    { 
-      id: 'cargoType', 
-      label: 'Cargo Type', 
+    {
+      id: 'cargoType',
+      label: 'Cargo Type',
       width: 120,
       render: (row) => (
-        <Chip 
-          label={row.cargoType} 
-          size="small" 
-          color={row.cargoType === 'GOODS' ? 'primary' : 'secondary'} 
+        <Chip
+          label={row.cargoType}
+          size="small"
+          color={row.cargoType === 'GOODS' ? 'primary' : 'secondary'}
         />
       )
     },
@@ -145,21 +179,21 @@ export const useCompanyDetailsTabs = () => {
     { id: 'startLocation', label: 'Start Location', width: 200 },
     { id: 'endLocation', label: 'End Location', width: 200 },
     { id: 'departureDate', label: 'Departure Date', width: 150 },
-    { 
-      id: 'price', 
-      label: 'Price', 
+    {
+      id: 'price',
+      label: 'Price',
       width: 120,
       render: (row) => `${row.price.toFixed(2)} BGN`
     },
-    { 
-      id: 'isPaid', 
-      label: 'Status', 
+    {
+      id: 'isPaid',
+      label: 'Status',
       width: 100,
       render: (row) => (
-        <Chip 
-          label={row.isPaid ? 'Paid' : 'Unpaid'} 
-          size="small" 
-          color={row.isPaid ? 'success' : 'error'} 
+        <Chip
+          label={row.isPaid ? 'Paid' : 'Unpaid'}
+          size="small"
+          color={row.isPaid ? 'success' : 'error'}
         />
       )
     },
@@ -182,6 +216,17 @@ export const useCompanyDetailsTabs = () => {
         <EditIcon />
       </IconButton>
       <IconButton size="small" onClick={() => handleDeleteVehicle(row.id, vehicles)} color="error">
+        <DeleteIcon />
+      </IconButton>
+    </>
+  );
+
+  const getClientActions = (clients: ClientResponse[]) => (row: ClientResponse) => (
+    <>
+      <IconButton size="small" onClick={() => handleEditClient(row.id, clients)} color="primary">
+        <EditIcon />
+      </IconButton>
+      <IconButton size="small" onClick={() => handleDeleteClient(row.id, clients)} color="error">
         <DeleteIcon />
       </IconButton>
     </>
@@ -212,5 +257,14 @@ export const useCompanyDetailsTabs = () => {
     handleCloseVehicleModal,
     handleCloseVehicleDeleteDialog,
     getVehicleActions,
+    // Client CRUD
+    isClientModalOpen,
+    selectedClient,
+    isClientDeleteDialogOpen,
+    clientToDelete,
+    handleCreateClient,
+    handleCloseClientModal,
+    handleCloseClientDeleteDialog,
+    getClientActions,
   };
 };
