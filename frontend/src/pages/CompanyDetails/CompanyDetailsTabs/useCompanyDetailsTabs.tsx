@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Chip, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PaymentIcon from '@mui/icons-material/Payment';
 import type { EmployeeResponse } from '../../../types/employee.types';
 import type { VehicleResponse } from '../../../types/vehicle.types';
 import type { Column } from '../../../components/Table/Table.types';
@@ -28,6 +29,14 @@ export const useCompanyDetailsTabs = () => {
   const [selectedClient, setSelectedClient] = useState<ClientResponse | undefined>(undefined);
   const [isClientDeleteDialogOpen, setIsClientDeleteDialogOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState<ClientResponse | undefined>(undefined);
+
+  // Transport modal/dialog states
+  const [isTransportModalOpen, setIsTransportModalOpen] = useState(false);
+  const [selectedTransport, setSelectedTransport] = useState<TransportResponse | undefined>(undefined);
+  const [isTransportDeleteDialogOpen, setIsTransportDeleteDialogOpen] = useState(false);
+  const [transportToDelete, setTransportToDelete] = useState<TransportResponse | undefined>(undefined);
+  const [isPayTransportDialogOpen, setIsPayTransportDialogOpen] = useState(false);
+  const [transportToPay, setTransportToPay] = useState<TransportResponse | undefined>(undefined);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -115,6 +124,45 @@ export const useCompanyDetailsTabs = () => {
   const handleCloseClientDeleteDialog = () => {
     setIsClientDeleteDialogOpen(false);
     setClientToDelete(undefined);
+  };
+
+  // Transport handlers
+  const handleCreateTransport = () => {
+    setSelectedTransport(undefined);
+    setIsTransportModalOpen(true);
+  };
+
+  const handleEditTransport = (transportId: number, transports: TransportResponse[]) => {
+    const transport = transports.find(t => t.id === transportId);
+    setSelectedTransport(transport);
+    setIsTransportModalOpen(true);
+  };
+
+  const handleDeleteTransport = (transportId: number, transports: TransportResponse[]) => {
+    const transport = transports.find(t => t.id === transportId);
+    setTransportToDelete(transport);
+    setIsTransportDeleteDialogOpen(true);
+  };
+
+  const handlePayTransport = (transportId: number, transports: TransportResponse[]) => {
+    const transport = transports.find(t => t.id === transportId);
+    setTransportToPay(transport);
+    setIsPayTransportDialogOpen(true);
+  };
+
+  const handleCloseTransportModal = () => {
+    setIsTransportModalOpen(false);
+    setSelectedTransport(undefined);
+  };
+
+  const handleCloseTransportDeleteDialog = () => {
+    setIsTransportDeleteDialogOpen(false);
+    setTransportToDelete(undefined);
+  };
+
+  const handleClosePayTransportDialog = () => {
+    setIsPayTransportDialogOpen(false);
+    setTransportToPay(undefined);
   };
 
   // Employee columns
@@ -232,6 +280,22 @@ export const useCompanyDetailsTabs = () => {
     </>
   );
 
+  const getTransportActions = (transports: TransportResponse[]) => (row: TransportResponse) => (
+    <>
+      {!row.isPaid && (
+        <IconButton size="small" onClick={() => handlePayTransport(row.id, transports)} color="success">
+          <PaymentIcon />
+        </IconButton>
+      )}
+      <IconButton size="small" onClick={() => handleEditTransport(row.id, transports)} color="primary">
+        <EditIcon />
+      </IconButton>
+      <IconButton size="small" onClick={() => handleDeleteTransport(row.id, transports)} color="error">
+        <DeleteIcon />
+      </IconButton>
+    </>
+  );
+
   return {
     activeTab,
     handleTabChange,
@@ -266,5 +330,17 @@ export const useCompanyDetailsTabs = () => {
     handleCloseClientModal,
     handleCloseClientDeleteDialog,
     getClientActions,
+    // Transport CRUD
+    isTransportModalOpen,
+    selectedTransport,
+    isTransportDeleteDialogOpen,
+    transportToDelete,
+    isPayTransportDialogOpen,
+    transportToPay,
+    handleCreateTransport,
+    handleCloseTransportModal,
+    handleCloseTransportDeleteDialog,
+    handleClosePayTransportDialog,
+    getTransportActions,
   };
 };
